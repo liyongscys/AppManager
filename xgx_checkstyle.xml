@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN" "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+
+<!--
+    This configuration file was written by the eclipse-cs plugin configuration editor
+-->
+<!--
+    Checkstyle-Configuration: 201407_checkstyle
+    Description: none
+-->
+<module name="Checker">
+	<property name="severity" value="warning"/>
+	<!-- Checks that a package-info.java file exists for each package.     -->
+	<!-- See http://checkstyle.sf.net/config_javadoc.html#JavadocPackage -->
+	<!--module name="JavadocPackage"/-->
+  
+	<module name="TreeWalker">
+		<!-- Checks for Javadoc comments.                     -->
+		<!-- javadoc的检查 								      -->
+		<!-- See http://checkstyle.sf.net/config_javadoc.html -->
+		
+		<!-- 检查所有的interface和class -->
+		<module name="JavadocType">
+			<property name="severity" value="ignore"/>
+			<metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+			<property name="authorFormat" value="\S"/> 
+			<message key="javadoc.missing" value="缺少注释。"/>
+			<message key="type.missingTag" value="注解缺少 {0} tag."/>  
+			<message key="javadoc.unusedTagGeneral" value="不使用的注解tag"/>  
+			<message key="type.tagFormat" value="注解tag {0} 必须符合正则表达式 ''{1}''."/> 
+		</module>
+		
+		<!-- 检查所有方法的javadoc -->
+		<module name="JavadocMethod">
+			<property name="allowUndeclaredRTE" value="true"/>
+			<property name="allowMissingThrowsTags" value="true"/>
+			<property name="allowMissingReturnTag" value="true"/>
+			<property name="allowMissingPropertyJavadoc" value="true"/>
+			<message key="javadoc.missing" value="缺少注释。"/>
+		</module>
+		
+
+		
+		<!-- Checks for annotations                                   -->
+		<!-- 注解检查                                 				  -->
+		<!-- http://checkstyle.sourceforge.net/config_annotation.html -->
+		
+
+		
+		<!-- Checks for Naming Conventions.                  -->
+		<!-- 命名方面的检查，它们都使用了Sun官方定的规则。   -->
+		<!-- See http://checkstyle.sf.net/config_naming.html -->
+		
+        <!-- 局部的非final型的变量，包括catch中的参数的检查 -->
+        <module name="LocalVariableName">
+			<message key="name.invalidPattern" value="名称 ''{0}'' 必须符合正则表达式 ''{1}''."/>
+		</module>
+        
+        <!-- 方法名的检查 -->
+        <module name="MethodName">
+			<property name="severity" value="warning"/>
+			<property name="format" value="(^[a-z][a-zA-Z0-9]*$)"/>
+			<message key="name.invalidPattern" value="名称 ''{0}''必须符合以下正则表达式 ''{1}''."/>
+			<message key="method.name.equals.class.name" value="名称 ''{0}'' 不能与内部类名称相同."/>
+		</module>
+        
+        <!-- 方法的参数名 -->
+        <module name="ParameterName"/>
+		
+		
+		
+		<!-- Checks for imports                              -->
+        <!-- import方面的检查                                -->
+        <!-- See http://checkstyle.sf.net/config_import.html -->
+        <!--
+          没用的import检查，比如：1.没有被用到2.重复的3.import java.lang的4.import
+          与该类在同一个package的
+        -->
+        <module name="UnusedImports">
+			<message key="import.unused" value="引入未使用的{0}."/>
+		</module>
+	
+	
+	
+		<!-- Checks for Size Violations.                    -->
+        <!-- 长度方面的检查                                 -->
+        <!-- See http://checkstyle.sf.net/config_sizes.html -->
+		<!-- 检查方法和构造子参数的最大个数,最大为5 -->
+		<module name="ParameterNumber">
+			<property name="severity" value="error"/>
+			<property name="max" value="5"/>
+			<message key="maxParam" value="最多不超过{0,number,integer} 参数."/>
+			<metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+		</module>
+		
+		
+		
+		<!-- Modifier Order Checks                              -->
+        <!-- See http://checkstyle.sf.net/config_modifiers.html -->
+        <!-- Modifier Order Checks                              -->
+		
+		
+		
+		<!-- Checks for blocks. You know, those {}'s         -->
+        <!-- See http://checkstyle.sf.net/config_blocks.html -->
+		<!-- 检查空代码块					                 -->
+        
+		
+		
+		<!-- Checks for common coding problems               -->
+		<!-- 检查代码问题						             -->
+        <!-- See http://checkstyle.sf.net/config_coding.html -->
+        
+		<!-- Checks that a local variable or a parameter does not shadow a field that is defined in the same class.-->  
+        <!-- 检查局部变量或参数是否隐藏了类中的变量-->
+        <module name="HiddenField">
+			<property name="ignoreConstructorParameter" value="true"/>
+			<property name="ignoreSetter" value="true"/>
+			<property name="ignoreAbstractMethods" value="true"/>
+			<message key="hidden.field" value="''{0}''局部变量或参数隐藏了类中的变量"/>
+		</module>
+        
+		<!-- Checks for overly complicated boolean expressions. Currently finds code like  if (b == true), b || true, !false, etc.   
+                  检查boolean值是否冗余的地方  
+                  Rationale: Complex boolean logic makes code hard to understand and maintain. -->  
+        <module name="SimplifyBooleanExpression">
+			<property name="severity" value="warning"/>
+			<message key="simplify.expression" value="请简化一下表达式''{0}''."/>
+		</module>
+        
+		
+		
+		<!-- Checks for class design                         -->
+        <!-- See http://checkstyle.sf.net/config_design.html -->
+       
+	   
+		
+	</module>
+	<module name="RegexpMultiline">
+		<property name="format" value="System\.out\.print"/>
+		<property name="message" value="不允许出现system.out.print语句"/>
+	</module>
+	<module name="RegexpMultiline">
+		<property name="format" value="printStackTrace"/>
+		<property name="message" value="不允许出现printStackTrace语句"/>
+	</module>
+</module>

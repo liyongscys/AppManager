@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+               
+<mapper namespace="com.cabletech.rms.proxy.dao.ApkInfoDao">
+
+    <insert id="insert" parameterType="ApkInfo">
+        INSERT INTO released_apk_versions(
+            id,
+            app_key,
+			version_code,
+			version_name,
+			force_update,
+			file_name,
+			file_path,
+			file_size,
+			uploader,			
+			"DESC",
+			uploadtime
+           ) 
+        VALUES(
+            SEQ_released_apk_versions.nextval,
+            #{appKey,jdbcType=VARCHAR},
+			#{versionCode,jdbcType=NUMERIC},
+			#{versionName,jdbcType=VARCHAR},
+			#{forceUpdate,jdbcType=VARCHAR},
+			#{fileName,jdbcType=VARCHAR},
+			#{filePath,jdbcType=VARCHAR},
+			#{fileSize,jdbcType=NUMERIC},
+			#{uploader,jdbcType=VARCHAR},		
+			#{desc,jdbcType=VARCHAR},
+			#{uploadTime,jdbcType=TIMESTAMP}
+           )
+    </insert>
+    
+    <delete id="delete" parameterType="ApkInfo">
+        delete from released_apk_versions WHERE id=#{id}
+    </delete>
+    
+    <select id="checkTableExist" resultType="int" >
+       select count(table_name) from user_tables where table_name = 'released_apk_versions'
+    </select>
+    
+    <select id="checkSequenceExist" resultType="int" >
+       SELECT COUNT(*) FROM user_sequences WHERE sequence_name='SEQ_released_apk_versions'
+    </select>
+    
+    <sql id="base_select">
+       SELECT 
+            id, 
+            app_key as appKey,
+			version_code as versionCode,
+			version_name as versionName,
+			force_update as forceUpdate,
+			file_name as fileName,
+			file_path as filePath,
+			file_size as fileSize,
+			uploader as uploader,			
+			"DESC" as "desc",
+			uploadtime as uploadTime 
+       FROM released_apk_versions
+    </sql>
+    
+    <select id="get" resultType="ApkInfo" parameterType="int">
+       <include refid="base_select"/>
+       WHERE id=#{value} 
+    </select> 
+    
+    <select id="getLastApk" resultType="ApkInfo" parameterType="ApkInfo">
+       <include refid="base_select"/>
+       WHERE 
+       <![CDATA[ 
+           version_code>#{versionCode} and app_key=#{appKey}
+       ]]>
+       order by version_code desc      
+    </select>
+    
+    <select id="count" resultType="int" parameterType="ApkInfo">
+       SELECT 
+            count(version_code) as value
+       FROM released_apk_versions 
+    </select>
+    
+    <select id="list" resultType="ApkInfo">
+       <include refid="base_select"/>
+       order by uploadTime,app_key,version_code
+    </select> 
+
+</mapper>

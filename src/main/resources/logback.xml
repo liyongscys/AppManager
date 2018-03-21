@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="true" scanPeriod="30 seconds">
+    <property resource="config.properties" />
+	<contextName>cabletech_message_gprs</contextName>
+	<timestamp key="byDay" datePattern="yyyy-MM-dd"/>
+	
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+		    <pattern><![CDATA[%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} %msg%n]]></pattern>
+		</encoder>
+	</appender>
+
+	<appender name="PROJECT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${app.work.dir}/log/rms.txt</file>	 		
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${app.work.dir}/log/rms-%d{yyyy-MM-dd}.txt</fileNamePattern>
+            <maxHistory>31</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern><![CDATA[%d{yyyy-MM-dd HH:mm:ss} %-5level %msg%n]]></pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="MESSAGE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${app.work.dir}/log/msglog.txt</file>		
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${app.work.dir}/log/msglog-%d{yyyy-MM-dd}.%i.txt</fileNamePattern>
+            <maxHistory>7</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern><![CDATA[%d{yyyy-MM-dd HH:mm:ss} %msg%n]]></pattern>
+		</encoder>
+	</appender>
+	<root>
+		<level value="${logging.level.root}" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="PROJECT" />
+	</root>
+	
+	<logger name="com.cabletech.communication.codec"  additivity="true" level="INFO">
+        <appender-ref ref="MESSAGE"/>
+    </logger>
+	 
+	<!--  打印sql  -->
+	<logger name="java.sql" level="${logging.level.java.sql}"/>
+	<logger name="org.geotools" level="WARN" />
+
+	<!-- 
+	jdbc.sqlonly	 Logs only SQL. SQL executed within a prepared statement is automatically shown with it's bind arguments replaced with the data bound at that position, for greatly increased readability.	 1.0
+    jdbc.sqltiming	 Logs the SQL, post-execution, including timing statistics on how long the SQL took to execute.	 1.0
+    jdbc.audit	 	 Logs ALL JDBC calls except for ResultSets. This is a very voluminous output, and is not normally needed unless tracking down a specific JDBC problem.	 1.0
+    jdbc.resultset	 Even more voluminous, because all calls to ResultSet objects are logged.	 1.0
+    jdbc.connection	 Logs connection open and close events as well as dumping all open connection numbers. This is very useful for hunting down connection leak problems.
+	 -->	
+	<logger name="jdbc.sqlonly" level="INFO" />
+	<logger name="jdbc.sqltiming" level="ERROR" />
+	<logger name="jdbc.audit" level="ERROR" />
+	<logger name="jdbc.resultset" level="ERROR" />
+	<logger name="jdbc.connection" level="ERROR" />
+
+</configuration>

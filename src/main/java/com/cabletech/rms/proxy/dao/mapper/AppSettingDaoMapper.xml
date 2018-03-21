@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+               
+<mapper namespace="com.cabletech.rms.proxy.dao.AppSettingDao">
+
+    <insert id="insert" parameterType="SettingItem">
+        INSERT INTO APP_SETTINGS(
+           ITEM_KEY,
+           ITEM_DESC,
+           ITEM_VALUE,
+           OPT_CODES,
+           OPT_DESCS 
+           ) 
+        VALUES(            
+            #{name,jdbcType=VARCHAR},
+			#{desc,jdbcType=VARCHAR},
+			#{value,jdbcType=VARCHAR},
+			#{optCode,jdbcType=VARCHAR},
+			#{optDesc,jdbcType=VARCHAR}
+           )
+    </insert>
+    
+    <update id="update" parameterType="SettingItem">
+	     UPDATE 
+	         APP_SETTINGS  
+	     SET
+             ITEM_VALUE=#{value,jdbcType=VARCHAR}
+        WHERE 
+             ITEM_KEY=#{name}
+    </update>   
+
+    
+    <sql id="base_select">
+       SELECT 
+           ITEM_KEY as name,
+           ITEM_DESC as desc,
+           ITEM_VALUE as value,
+           OPT_CODES as optCode,
+           OPT_DESCS as optDesc  
+       FROM APP_SETTINGS
+    </sql>
+    
+    <select id="get" resultType="SettingItem" parameterType="string">
+       <include refid="base_select"/>
+       WHERE ITEM_KEY=#{value} 
+    </select>
+    
+    <select id="list" resultType="SettingItem">
+       <include refid="base_select"/>
+       order by ITEM_KEY 
+    </select> 
+
+</mapper>

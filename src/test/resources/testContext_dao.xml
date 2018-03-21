@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd
+	">
+
+	<description>Spring公共配置</description>
+	
+	<import resource="applicationContext-cache.xml" />
+	
+	<import resource="applicationContext-ds-spied.xml" />
+	<import resource="applicationContext-mybatis.xml" />
+	<import resource="applicationContext-ctbase.xml" />
+	<import resource="applicationContext-dao.xml" />
+	
+
+	<context:component-scan base-package="com.cabletech.message.handler.dao.impl" use-default-filters="false">
+		<context:include-filter type="regex"
+			expression=".*Dao$" />
+	</context:component-scan>
+
+	<!-- 以静态变量保存ApplicationContext -->
+
+	<bean id="springContextHolder" class="com.cabletech.common.util.SpringContextHolder"
+		lazy-init="false" />
+
+	<bean id="configProperties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:config_test.properties" />
+	</bean>
+
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="properties" ref="configProperties" />
+	</bean>
+
+</beans>
+
+

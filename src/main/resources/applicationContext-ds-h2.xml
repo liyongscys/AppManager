@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	   xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/jdbc
+	  http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+	  http://www.springframework.org/schema/tx
+	  http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="h2DataSourceSpied" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="org.h2.Driver" />
+		<property name="url" value="jdbc:h2:file:#{rmsAppPath.localDbFile}" />
+		<property name="initialSize" value="1" />
+		<property name="maxActive" value="3" />		
+	</bean>
+	
+	<bean id="h2DataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+		<constructor-arg ref="h2DataSourceSpied" />
+	</bean>
+	
+	<!-- 事务管理器配置,单数据源事务 -->
+	<bean id="h2TransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="h2DataSource" />
+	</bean>	
+	
+	<!-- 使用annotation定义事务 -->
+	<tx:annotation-driven transaction-manager="h2TransactionManager" proxy-target-class="false" />	
+	
+	<jdbc:initialize-database data-source="h2DataSource" ignore-failures="DROPS">
+		<jdbc:script location="classpath:schema.sql" encoding="UTF-8"/>
+	</jdbc:initialize-database>
+	 
+	<!--sqlSessionFactory-->
+	<bean id="h2SqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="h2DataSource" />
+		<property name="typeAliasesPackage" value="com.cabletech.rms.proxy.model"/>
+		<property name="configLocation" value="classpath:/mybatis-config-h2.xml" />
+		<property name="mapperLocations" value="classpath*:com/cabletech/rms/proxy/dao/mapper/*.xml"/>
+
+	</bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer" >
+        <property name="basePackage" value="com.cabletech.rms.proxy.dao.autoMapper" />
+        <property name="sqlSessionFactoryBeanName" value="h2SqlSessionFactory"/>
+
+    </bean>
+
+	<context:component-scan base-package="com.cabletech.rms.proxy.dao.impl" >
+	</context:component-scan>
+
+</beans>

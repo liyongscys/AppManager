@@ -1,0 +1,83 @@
+[
+  {
+    "id": 1,
+    "text": "系统管理",
+    "iconCls": "icon-ok",
+    "children": [
+      {
+        "id": 2,
+        "text": "清除缓存",
+        "attributes": {
+          "url": "/console/cache_manager.jsp"
+        }
+      },
+      {
+        "id": 3,
+        "text": "查看日志",
+        "attributes": {
+          "url": "/console/logger"
+        }
+      }
+    ]
+  },
+
+  {
+    "id": 5,
+    "text": "APP管理",
+    "iconCls": "icon-ok",
+    "children": [
+      {
+        "id": 51,
+        "text": "app管理产品",
+        "attributes": {
+          "url": "/console/app_manager.jsp"
+        }
+      },
+      {
+        "id": 51,
+        "text": "apk版本管理",
+        "attributes": {
+          "url": "/console/apk_manager.jsp"
+        }
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "text": "androidpn管理",
+    "iconCls": "icon-ok",
+    "children": [
+      {
+        "id": 62,
+        "text": "在线设备",
+        "attributes": {
+          "url": "/console/androidpn_user.jsp"
+        }
+      },
+      {
+        "id": 63,
+        "text": "推送消息",
+        "attributes": {
+          "url": "/console/androidpn_notification.jsp"
+        }
+      }
+    ]
+  },
+  {
+    "id": 99,
+    "text": "系统配置",
+    "iconCls": "icon-ok",
+    "attributes": {
+      "url": "/console/app_settings.jsp"
+    }
+  }
+,
+  {
+    "id": 100,
+    "text": "数据库",
+    "iconCls": "icon-ok",
+    "attributes": {
+      "url": "/h2console"
+    }
+  }
+]

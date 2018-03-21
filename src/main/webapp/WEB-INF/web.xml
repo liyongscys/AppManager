@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<display-name>Rms System</display-name>
+  	<context-param>
+		<param-name>julToSlf4jBridgeCleanOldHanders</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<!-- 阜阳工程进度项目
+		<param-value>classpath:applicationContext-pm.xml</param-value>
+		-->
+		<!-- --> 
+		<param-value>classpath:applicationContext.xml</param-value>
+		 
+	</context-param>
+	
+	<!-- 对于一个domain中部署多个Web应用时，此值一定不能相同，否则会导致log4j配置异常 -->
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>rms.proxy.root</param-value>
+	</context-param>
+	
+	<!--java.util.log的日志输出转换到Slf4j的日志输出的初始化--> 
+	<listener>
+		<listener-class>com.cabletech.common.util.JulToSlf4jConfigListener</listener-class>
+	</listener>	
+	
+       
+	<!--Spring的ApplicationContext 载入 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- 使用H2控制台的Servlet H2控制台是一个独立的应用程序，包括它自己的Web服务器，但它可以作为一个servlet作为-->
+	<servlet>
+		<servlet-name>H2Console</servlet-name>
+		<servlet-class>org.h2.server.web.WebServlet</servlet-class>
+		<init-param>
+			<param-name>webAllowOthers</param-name>
+			<param-value></param-value>
+		</init-param>
+		<init-param>
+			<param-name>trace</param-name>
+			<param-value></param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<!-- 映射H2控制台的访问路径 -->
+	<servlet-mapping>
+		<servlet-name>H2Console</servlet-name>
+		<url-pattern>/h2console/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- Shiro Filter is defined in the spring application context:--> 
+    <filter>
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+ 
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>springmvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:applicationContext-mvc.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>springmvc</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ViewStatusMessages</servlet-name>
+		<servlet-class>ch.qos.logback.classic.ViewStatusMessagesServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ViewStatusMessages</servlet-name>
+		<url-pattern>/console/logger</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+        <description>自启动Servlet</description>
+        <display-name>Application launch servlet</display-name>
+        <servlet-name>startupServlet</servlet-name>
+        <servlet-class>com.cabletech.rms.proxy.RmsApplication</servlet-class>
+        <load-on-startup>999</load-on-startup>
+    </servlet>    
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/common/error/500.jsp</location>
+	</error-page>
+</web-app>

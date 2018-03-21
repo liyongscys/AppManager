@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.cabletech.rms.proxy.dao.UrlAddressDao">
+	<select id="list" resultType="Item" parameterType="map">
+		select regionname as name,
+		url as tag,
+		weburl as type,
+		casurl as state
+		from url_address 
+		<if test="isShowAll==null">
+		where state is null
+		</if>
+	</select>
+</mapper>

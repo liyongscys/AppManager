@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!--<classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" />-->
+
+    <context id="h2Tables" targetRuntime="MyBatis3">
+        <jdbcConnection driverClass="org.h2.Driver"
+                        connectionURL="jdbc:h2:file:e://rms-work/db/rms-db"
+                        userId=""
+                        password="">
+        </jdbcConnection>
+
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.cabletech.rms.proxy.model" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="com.cabletech.rms.proxy.dao.mapper"  targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.cabletech.rms.proxy.dao.autoMapper"  targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <table tableName="apk_download_his" domainObjectName="ApkDownloadHis">
+            <property name="useActualColumnNames" value="false"/>
+            <generatedKey column="ID" sqlStatement="DB2" identity="true" />
+        </table>
+
+    </context>
+</generatorConfiguration>
